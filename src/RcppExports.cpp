@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // rcpp_hello_world
 List rcpp_hello_world();
-RcppExport SEXP _anRpackage_rcpp_hello_world() {
+RcppExport SEXP _WHInter_rcpp_hello_world() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,11 +17,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_anRpackage_rcpp_hello_world", (DL_FUNC) &_anRpackage_rcpp_hello_world, 0},
+    {"_WHInter_rcpp_hello_world", (DL_FUNC) &_WHInter_rcpp_hello_world, 0},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_anRpackage(DllInfo *dll) {
+RcppExport void R_init_WHInter(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
