@@ -12,11 +12,10 @@ Rcpp::List WHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda = 100,
              bool useBias = 1, char useMyMips = 2, char typeBound = 2,
              int F = 50, double eps = 1e-8) {
   
-  auto w =
-      WHInter::WHInter(mat, Y, nlambda, lambdaMinRatio, maxSelectedFeatures,
-                       useBias, useMyMips, typeBound, F, eps);
+  class WHInter w{mat, Y, nlambda, lambdaMinRatio, maxSelectedFeatures,
+                       useBias, useMyMips, typeBound, F, eps};
   w.solve();
   
-  return w.get_result()
+  return w.get_model(); 
 
 }

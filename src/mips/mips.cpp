@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <vector>
+#include <numeric>
 #include "mips.h"
 
 Mips::Mips(){};

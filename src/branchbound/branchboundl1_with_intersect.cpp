@@ -3,6 +3,7 @@
 #include <math.h>
 #include <limits>
 #include <algorithm>
+#include <numeric>
 
 BranchBoundL1::BranchBoundL1() : BranchBound(){};
 BranchBoundL1::~BranchBoundL1(){};

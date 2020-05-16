@@ -1,5 +1,6 @@
 #include <vector>
 #include <algorithm>
+#include <numeric>
 #include <math.h>
 #include <iostream>
 #include "./../other/model.h"

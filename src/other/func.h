@@ -1,3 +1,6 @@
+#ifndef FUNC_H
+#define FUNC_H
+
 #include <vector>
 #include <string>
 #include "model.h"
@@ -38,3 +41,6 @@ void read_data(std::string filename, Args args, int &n, int &dim,
                std::vector<std::vector<int>> &Zinv, std::vector<double> &Y);
 double find_xi(const std::vector<double> &r, const model &model, const double lambda);
 double dual(const std::vector<double> &theta, const std::vector<double> &Y, const int n);
+
+
+#endif

@@ -34,9 +34,9 @@ protected:
 
 private:
   // Data
-  std::vector<std::vector<int>> Z; // each element vector contains the non-zero
+  std::vector<std::vector<int> > Z; // each element vector contains the non-zero
                                    // elements of the corresponding column
-  std::vector<std::vector<int>>
+  std::vector<std::vector<int> >
       Zinv; // each element vector contains the non-zero elements of the
             // corresponding row
   std::vector<double> Y; // outcome vector
@@ -50,7 +50,7 @@ private:
   double loss = 0;
 
   double bias = 0;
-  double bias_vec; 
+  vector<double> bias_vec; 
 
   vector<double> theta; // dual variable
   references ref;
@@ -77,8 +77,8 @@ private:
 
   vector<int> index;
   vector<double> w;
-  vector<vector<int>> x;
-  vector<vector<int>> key;
+  vector<vector<int> > x;
+  vector<vector<int> > key;
 
   double P_new, P_old, D_subproblem, D_subproblem_new;
 
@@ -94,7 +94,7 @@ private:
 
   void prune_branch();
 
-  void save_support(int t); 
+  void save_model(int t); 
 
   bool compute_bound();
 

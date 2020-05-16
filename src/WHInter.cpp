@@ -24,10 +24,10 @@
 
 using namespace std;
 
-WHInter::WHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda = 100,
-                 double lambdaMinRatio = 0.01, int maxSelectedFeatures = 150,
-                 bool useBias = 1, char useMyMips = 2, char typeBound = 2,
-                 int F = 50, double eps = 1e-8) {
+WHInter::WHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda,
+                 double lambdaMinRatio, int maxSelectedFeatures,
+                 bool useBias, char useMyMips, char typeBound,
+                 int F, double eps) {
 
   args.nlambda = nlambda;
   args.lambdaMinRatio = lambdaMinRatio;
@@ -129,7 +129,7 @@ WHInter::WHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda = 100,
 
   // Initializing support
   support.set_size(args.nlambda);
-  support.for_each([](sp_mat &X) { X.zeros(dim, dim); });
+  support.for_each([this](arma::sp_mat &X) { X.zeros(dim, dim); });
 
   std::vector<int> x;
   set_intersection(Z[maxnode.key[0]].begin(), Z[maxnode.key[0]].end(),
@@ -157,7 +157,7 @@ WHInter::~WHInter() {
   delete bb;
 }
 
-void WHInter::pre_solve(bool dual = false) {
+void WHInter::pre_solve(bool dual) {
 
   int m = mod.size();
   int j = 0;
@@ -401,7 +401,7 @@ bool WHInter::compute_bound() {
   }
 }
 
-void WHInter::save_support(int t) {
+void WHInter::save_model(int t) {
   if (args.useBias)
     bias_vec.push_back(bias);
   for (auto it = mod.begin(); it != mod.end(); it++) {
@@ -422,7 +422,7 @@ void WHInter::solve() {
     x.reserve(m);
     key.reserve(m);
 
-    pre_solve(dual = false); // condition on primal here
+    pre_solve(false); // condition on primal here
     clean_model();
     update_theta();
 
@@ -444,12 +444,12 @@ void WHInter::solve() {
       x.reserve(m);
       key.reserve(m);
 
-      pre_solve(dual = true); // condition on dual here
+      pre_solve(true); // condition on dual here
       clean_model();
       update_theta();
     }
 
-    save_model();
+    save_model(t);
 
     update_branch();
 
@@ -458,8 +458,8 @@ void WHInter::solve() {
   }
 }
 
-Rcpp::List get_model() {
-  return List::create(
+Rcpp::List WHInter::get_model() {
+  return Rcpp::List::create(
       Rcpp::Named("bias") = bias_vec, Rcpp::Named("beta") = support,
       Rcpp::Named("lambda") = lambda, Rcpp::Named("dim") = dim,
       Rcpp::Named("nobs") = n, Rcpp::Named("offset") = args.useBias);
