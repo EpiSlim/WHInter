@@ -1,13 +1,13 @@
-#include "./WHInter.h"
-#include "./branchbound/branchbound.h"
-#include "./branchbound/branchboundl1_with_intersect.h"
-#include "./branchbound/branchboundl2.h"
-#include "./branchbound/branchboundnoproj.h"
-#include "./mips/mips.h"
-#include "./mips/mips_mymips.h"
-#include "./mips/mips_naive.h"
-#include "./mips/mips_naiveTAAT.h"
-#include "./other/func.h"
+#include "WHInter.h"
+#include "branchbound.h"
+#include "branchboundl1_with_intersect.h"
+#include "branchboundl2.h"
+#include "branchboundnoproj.h"
+#include "mips.h"
+#include "mips_mymips.h"
+#include "mips_naive.h"
+#include "mips_naiveTAAT.h"
+#include "func.h"
 #include <RcppArmadillo.h>
 #include <algorithm>
 #include <chrono>
@@ -24,7 +24,7 @@
 
 using namespace std;
 
-WHInter::WHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda,
+classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda,
                  double lambdaMinRatio, int maxSelectedFeatures,
                  bool useBias, char useMyMips, char typeBound,
                  int F, double eps) {
@@ -152,12 +152,12 @@ WHInter::WHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda,
   open.reserve(dim);
 }
 
-WHInter::~WHInter() {
+classWHInter::~classWHInter() {
   delete mips;
   delete bb;
 }
 
-void WHInter::pre_solve(bool dual) {
+void classWHInter::pre_solve(bool dual) {
 
   int m = mod.size();
   int j = 0;
@@ -266,14 +266,14 @@ void WHInter::pre_solve(bool dual) {
   }
 }
 
-void WHInter::update_theta() {
+void classWHInter::update_theta() {
   double xi = find_xi(r, mod, lam);
   for (int i = 0; i < n; i++) {
     theta[i] = xi * r[i];
   }
 }
 
-void WHInter::clean_model() {
+void classWHInter::clean_model() {
   int m = mod.size();
   mod.clear();
   for (int s = 0; s < m; s++) {
@@ -316,7 +316,7 @@ void WHInter::clean_model() {
   mips->set_model(mod);
 }
 
-void WHInter::update_branch() {
+void classWHInter::update_branch() {
   active_branch.clear();
   non_active_branch.clear();
   for (auto it = mod.begin(); it != mod.end(); it++) {
@@ -335,7 +335,7 @@ void WHInter::update_branch() {
   }
 }
 
-void WHInter::prune_branch() {
+void classWHInter::prune_branch() {
   // can be parallelized
   for (int idx_b = 0; idx_b < dim; ++idx_b) {
     vector<double> ref_res = ref[ref_id[idx_b]]; // ref_res is theta_j_ref
@@ -357,7 +357,7 @@ void WHInter::prune_branch() {
   }
 }
 
-bool WHInter::compute_bound() {
+bool classWHInter::compute_bound() {
   // Compute a new bound for the violated branches
   std::vector<int> best_id_tmp =
       mips->get_best_id(); // vector of violated branches
@@ -401,7 +401,7 @@ bool WHInter::compute_bound() {
   }
 }
 
-void WHInter::save_model(int t) {
+void classWHInter::save_model(int t) {
   if (args.useBias)
     bias_vec.push_back(bias);
   for (auto it = mod.begin(); it != mod.end(); it++) {
@@ -411,7 +411,7 @@ void WHInter::save_model(int t) {
   }
 }
 
-void WHInter::solve() {
+void classWHInter::solve() {
   for (int t = 0; t < args.nlambda; t++) {
     lam = lambda[t];
     mips->set_lambda(lam);
@@ -426,9 +426,9 @@ void WHInter::solve() {
     clean_model();
     update_theta();
 
-    int active = mod.size();
+    // int active = mod.size();
     int n_iterB = 0;
-    double P_subproblem = P_new;
+    // double P_subproblem = P_new;
 
     for (int iterB = 1; iterB < 10000000; iterB++) {
       n_iterB++;
@@ -458,7 +458,7 @@ void WHInter::solve() {
   }
 }
 
-Rcpp::List WHInter::get_model() {
+Rcpp::List classWHInter::get_model() {
   return Rcpp::List::create(
       Rcpp::Named("bias") = bias_vec, Rcpp::Named("beta") = support,
       Rcpp::Named("lambda") = lambda, Rcpp::Named("dim") = dim,

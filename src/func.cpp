@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 
 double dual(const std::vector<double> &theta, const std::vector<double> &Y,
@@ -34,7 +35,7 @@ double find_xi(const std::vector<double> &r, const model &model,
     }
     // lambda is slightly shrinked with a term 1e-12 to avoid precision errors
     // which would lead to xTphi = lambda + epsilon
-    double xi = (lambda - 1e-10) / abs(xTr);
+    double xi = (lambda - 1e-10) / std::abs(xTr);
     if (xi < xi_min) {
       xi_min = xi;
     }

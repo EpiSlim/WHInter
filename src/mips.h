@@ -1,7 +1,7 @@
 #ifndef MIPS_H
 #define MIPS_H
 
-#include "./../other/model.h"
+#include "model.h"
 #include <vector>
 
 class Mips{

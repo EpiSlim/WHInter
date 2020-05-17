@@ -3,7 +3,7 @@
 #include <numeric>
 #include <math.h>
 #include <iostream>
-#include "./../other/model.h"
+#include "model.h"
 #include "mips_mymips.h"
 
 MyMips::MyMips(std::vector<int> init_best_id) : Mips(init_best_id){};

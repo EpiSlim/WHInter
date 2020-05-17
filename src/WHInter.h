@@ -1,12 +1,12 @@
-#include "./branchbound/branchbound.h"
-#include "./branchbound/branchboundl1_with_intersect.h"
-#include "./branchbound/branchboundl2.h"
-#include "./branchbound/branchboundnoproj.h"
-#include "./mips/mips.h"
-#include "./mips/mips_mymips.h"
-#include "./mips/mips_naive.h"
-#include "./mips/mips_naiveTAAT.h"
-#include "./other/func.h"
+#include "branchbound.h"
+#include "branchboundl1_with_intersect.h"
+#include "branchboundl2.h"
+#include "branchboundnoproj.h"
+#include "mips.h"
+#include "mips_mymips.h"
+#include "mips_naive.h"
+#include "mips_naiveTAAT.h"
+#include "func.h"
 #include <RcppArmadillo.h>
 #include <algorithm>
 #include <chrono>
@@ -23,7 +23,7 @@
 
 using namespace std;
 
-class WHInter {
+class classWHInter {
 protected:
   // Solver parametrization
   Args args;
@@ -99,12 +99,12 @@ private:
   bool compute_bound();
 
 public:
-  WHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda = 100,
+  classWHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda = 100,
           double lambdaMinRatio = 0.01, int maxSelectedFeatures = 150,
           bool useBias = 1, char useMyMips = 2, char typeBound = 2, int F = 50,
           double eps = 1e-8);
 
-  ~WHInter();
+  ~classWHInter();
 
   void solve();
 

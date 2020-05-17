@@ -32,8 +32,6 @@ void Naive::runTop1(std::vector<int>& queryIds, std::vector<int>& probeIds,
 
     nb_violators = 0;
 
-    auto t_start_ip = std::chrono::high_resolution_clock::now();
-
     long long int sum_common_coord_counter = 0;
 
     for (auto it_i = queryIds.begin(); it_i != queryIds.end(); ++it_i){
@@ -84,8 +82,6 @@ void Naive::runTop1(std::vector<int>& queryIds, std::vector<int>& probeIds,
             }
         }
     }
-
-    auto t_end_ip = std::chrono::high_resolution_clock::now();
 
     std::cout << "Naive: sum_common_coord_counter: " << sum_common_coord_counter << std::endl;
 };
