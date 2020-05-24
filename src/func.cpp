@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <Rcpp.h>
 
 
 double dual(const std::vector<double> &theta, const std::vector<double> &Y,
@@ -69,8 +70,7 @@ void read_data(std::string filename, Args args, int &n, int &dim,
 
   FILE *fp = fopen(filename.c_str(), "r");
   if (fp == NULL) {
-    fprintf(stderr, "Cannot open input file\n");
-    exit(1);
+    Rcpp::stop("Cannot open input file");
   }
 
   n = 0;
@@ -124,7 +124,7 @@ void read(int argc, char **argv, Args& args, int& n, int& dim, std::vector< std:
     char filename[1024];
     for (i = 1; i < argc; i++) {
         if (argv[i][0] != '-') break;
-        if (++i >= argc) exit(1);
+        if (++i >= argc) Rcpp::stop("");
         if (strcmp(argv[i-1], "-nlambda") == 0){
             args.nlambda = atoi(argv[i]);
         } else if (strcmp(argv[i-1], "-lambdaMinRatio") == 0){
@@ -144,12 +144,10 @@ void read(int argc, char **argv, Args& args, int& n, int& dim, std::vector< std:
         } else if (strcmp(argv[i-1], "-pathResults") == 0){
             args.pathResults = argv[i];
         } else {
-            std::cout << "unknown option" << std::endl;
-            exit(1);
-            break;
+            Rcpp::stop("unknown option"); 
         }
     }
-    if (i >= argc) exit(1);
+    if (i >= argc) Rcpp::stop("");
     std::strcpy(filename, argv[i]);
     read_data(filename, args, n, dim, Z, Zinv, Y);
 }

@@ -3,12 +3,14 @@
 #include "branchboundl1_with_intersect.h"
 #include "branchboundl2.h"
 #include "branchboundnoproj.h"
+#include "func.h"
 #include "mips.h"
 #include "mips_mymips.h"
 #include "mips_naive.h"
 #include "mips_naiveTAAT.h"
-#include "func.h"
+#include <Rcpp.h>
 #include <RcppArmadillo.h>
+#include <Rmath.h>
 #include <algorithm>
 #include <chrono>
 #include <cstdio>
@@ -24,10 +26,10 @@
 
 using namespace std;
 
-classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda,
-                 double lambdaMinRatio, int maxSelectedFeatures,
-                 bool useBias, char useMyMips, char typeBound,
-                 int F, double eps) {
+classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y,
+                           int nlambda, double lambdaMinRatio,
+                           int maxSelectedFeatures, bool useBias,
+                           char useMyMips, char typeBound, int F, double eps) {
 
   args.nlambda = nlambda;
   args.lambdaMinRatio = lambdaMinRatio;
@@ -79,8 +81,7 @@ classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambd
   } else if (args.useMyMips == 2) {
     mips = new NaiveTAAT(best_id0);
   } else {
-    cout << "Invalid argument for useMyMips" << endl;
-    exit(1);
+    Rcpp::stop("Invalid argument for useMyMips");
   }
 
   mips->set_best_ip(best_ip0);
@@ -108,8 +109,7 @@ classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambd
   } else if (args.typeBound == 2) {
     bb = new BranchBoundL2();
   } else {
-    cout << "Invalid argument for typeBound" << endl;
-    exit(1);
+    Rcpp::stop("Invalid argument for typeBound");
   }
 
   std::vector<double> best_ip_tmp = mips->get_best_ip();
@@ -175,7 +175,7 @@ void classWHInter::pre_solve(bool dual) {
   for (int iter = 0; iter <= 1000000; iter++) {
 
     for (int j = 0; j < m; j++) {
-      int i = j + rand() % (m - j);
+      int i = j + floor(R::runif(0, m - j));
       swap(index[i], index[j]);
     }
 

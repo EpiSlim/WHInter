@@ -83,5 +83,5 @@ void Naive::runTop1(std::vector<int>& queryIds, std::vector<int>& probeIds,
         }
     }
 
-    std::cout << "Naive: sum_common_coord_counter: " << sum_common_coord_counter << std::endl;
+    //std::cout << "Naive: sum_common_coord_counter: " << sum_common_coord_counter << std::endl;
 };

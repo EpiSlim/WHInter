@@ -56,5 +56,5 @@ void NaiveTAAT::runTop1(std::vector<int>& queryIds, std::vector<int>& probeIds,
             }
         }
     }
-    std::cout << "NaiveTAAT: sum_common_coord_counter: " << sum_common_coord_counter << std::endl;
+    //std::cout << "NaiveTAAT: sum_common_coord_counter: " << sum_common_coord_counter << std::endl;
 };
