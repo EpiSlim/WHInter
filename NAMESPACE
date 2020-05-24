@@ -1,3 +1,4 @@
 useDynLib(WHInter, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 exportPattern("^[[:alpha:]]+")
+importFrom(Matrix, rsparsematrix)
