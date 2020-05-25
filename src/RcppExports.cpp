@@ -7,7 +7,7 @@
 using namespace Rcpp;
 
 // WHInter
-Rcpp::List WHInter(arma::sp_mat& mat, std::vector<double>& Y, int nlambda, double lambdaMinRatio, int maxSelectedFeatures, bool useBias, char useMyMips, char typeBound, int F, double eps);
+Rcpp::List WHInter(arma::sp_mat& mat, std::vector<double>& Y, int nlambda, double lambdaMinRatio, int maxSelectedFeatures, bool useBias, int useMyMips, int typeBound, int F, double eps);
 RcppExport SEXP _WHInter_WHInter(SEXP matSEXP, SEXP YSEXP, SEXP nlambdaSEXP, SEXP lambdaMinRatioSEXP, SEXP maxSelectedFeaturesSEXP, SEXP useBiasSEXP, SEXP useMyMipsSEXP, SEXP typeBoundSEXP, SEXP FSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -18,8 +18,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type lambdaMinRatio(lambdaMinRatioSEXP);
     Rcpp::traits::input_parameter< int >::type maxSelectedFeatures(maxSelectedFeaturesSEXP);
     Rcpp::traits::input_parameter< bool >::type useBias(useBiasSEXP);
-    Rcpp::traits::input_parameter< char >::type useMyMips(useMyMipsSEXP);
-    Rcpp::traits::input_parameter< char >::type typeBound(typeBoundSEXP);
+    Rcpp::traits::input_parameter< int >::type useMyMips(useMyMipsSEXP);
+    Rcpp::traits::input_parameter< int >::type typeBound(typeBoundSEXP);
     Rcpp::traits::input_parameter< int >::type F(FSEXP);
     Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
     rcpp_result_gen = Rcpp::wrap(WHInter(mat, Y, nlambda, lambdaMinRatio, maxSelectedFeatures, useBias, useMyMips, typeBound, F, eps));

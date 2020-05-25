@@ -1,14 +1,15 @@
 Package: WHInter
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Solver for large-scale interaction problems on sparse binary data
 Version: 1.0
 Date: 2020-05-12
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one
-        or more full sentences.
+Author: Lotfi Slim
+Maintainer: Lotfi Slim <lotfi.slim91@gmail.com> 
+Description: WHInter is a working set algorithm to solve large L1-regularised problems with two-way interactions for binary design matrices. It avoids exhaustive scanning of all interactions by devoloping a new bound to test if a feature is involved in any interaction. The computations are further accelerated by using derivates of the maximum inner product search problem. 
+URL: http://proceedings.mlr.press/v80/morvan18a/morvan18a.pdf 
 License: GPL (>= 2)
 Depends: R (>= 3.5.0), Matrix
 Imports: Rcpp (>= 1.0.4), RcppArmadillo
+Suggests: testthat
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.0

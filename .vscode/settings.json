@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.ac": "makefile",
+        "*.rmd": "markdown",
+        "vector": "cpp"
+    }
+}

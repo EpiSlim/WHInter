@@ -99,9 +99,9 @@ private:
   bool compute_bound();
 
 public:
-  classWHInter(arma::sp_mat &mat, std::vector<double> &Y, int nlambda = 100,
+  classWHInter(arma::sp_mat &Xmat, std::vector<double> &Yvec, int nlambda = 100,
           double lambdaMinRatio = 0.01, int maxSelectedFeatures = 150,
-          bool useBias = 1, char useMyMips = 2, char typeBound = 2, int F = 50,
+          bool useBias = 1, int useMyMips = 2, int typeBound = 2, int F = 50,
           double eps = 1e-8);
 
   ~classWHInter();

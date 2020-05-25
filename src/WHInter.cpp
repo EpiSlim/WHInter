@@ -26,10 +26,10 @@
 
 using namespace std;
 
-classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y,
+classWHInter::classWHInter(arma::sp_mat &Xmat, std::vector<double> &Yvec,
                            int nlambda, double lambdaMinRatio,
-                           int maxSelectedFeatures, bool useBias,
-                           char useMyMips, char typeBound, int F, double eps) {
+                           int maxSelectedFeatures, bool useBias, int useMyMips,
+                           int typeBound, int F, double eps) {
 
   args.nlambda = nlambda;
   args.lambdaMinRatio = lambdaMinRatio;
@@ -40,14 +40,14 @@ classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y,
   args.F = F;
   args.eps = eps;
 
-  n = mat.n_rows;
-  dim = mat.n_cols;
+  n = Xmat.n_rows;
+  dim = Xmat.n_cols;
 
-  Z.reserve(dim);
-  if (args.useMyMips == 2)
-    Zinv.reserve(n);
+  Y = Yvec;
+  Z = std::vector<std::vector<int>>(dim, std::vector<int>());
+  Zinv = std::vector<std::vector<int>>(n, std::vector<int>());
 
-  for (auto it = mat.begin(); it != mat.end(); ++it) {
+  for (auto it = Xmat.begin(); it != Xmat.end(); ++it) {
     Z[it.col()].push_back(it.row());
     if (args.useMyMips == 2)
       Zinv[it.row()].push_back(it.col());
@@ -59,16 +59,16 @@ classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y,
 
   ref[0] = Y;
 
-  r.reserve(n);
+  r.resize(n);
 
   for (int i = 0; i < n; i++) {
     r[i] = Y[i];
     loss += r[i] * r[i];
   }
 
-  best_id0.reserve(dim);
-  best_ip0.reserve(dim);
-  ref_id.reserve(dim);
+  best_id0.resize(dim);
+  best_ip0.resize(dim);
+  ref_id.resize(dim);
 
   iota(best_id0.begin(), best_id0.end(), 0);
   fill(best_ip0.begin(), best_ip0.end(), 0);
@@ -91,7 +91,7 @@ classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y,
 
   // Check if necessary here: normally it should point out to the correct
   // inherited class
-  probes.reserve(dim);
+  probes.resize(dim);
   iota(probes.begin(), probes.end(), 0);
   if (args.useMyMips == 0) {
     mips->runTop1(probes, probes, Z, Y);
@@ -119,13 +119,13 @@ classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y,
   maxnode.key = vector<int>{argmax, mips->get_best_id()[argmax]};
 
   double lammax = maxnode.val;
-  lambda.reserve(args.nlambda);
+  lambda.resize(args.nlambda);
   for (int t = 1; t <= args.nlambda; t++) {
     lambda[t - 1] =
         lammax * pow(10, log10(args.lambdaMinRatio) * t / args.nlambda);
   }
 
-  theta.reserve(n);
+  theta.resize(n);
 
   // Initializing support
   support.set_size(args.nlambda);
@@ -140,7 +140,7 @@ classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y,
   active_branch.push_back(maxnode.key[0]);
   active_branch.push_back(maxnode.key[1]);
 
-  non_active_branch.reserve(dim);
+  non_active_branch.resize(dim);
 
   iota(begin(non_active_branch), end(non_active_branch), 0);
   non_active_branch.erase(non_active_branch.begin() + maxnode.key[0]);
@@ -148,8 +148,8 @@ classWHInter::classWHInter(arma::sp_mat &mat, std::vector<double> &Y,
                         maxnode.key[1]);
   non_active_branch.erase(pr.first, pr.second);
 
-  closed.reserve(dim);
-  open.reserve(dim);
+  closed.resize(dim);
+  open.resize(dim);
 }
 
 classWHInter::~classWHInter() {
@@ -412,15 +412,16 @@ void classWHInter::save_model(int t) {
 }
 
 void classWHInter::solve() {
+
   for (int t = 0; t < args.nlambda; t++) {
     lam = lambda[t];
     mips->set_lambda(lam);
 
     int m = mod.size();
-    index.reserve(m);
-    w.reserve(m);
-    x.reserve(m);
-    key.reserve(m);
+    index.resize(m);
+    w.resize(m);
+    x.resize(m);
+    key.resize(m);
 
     pre_solve(false); // condition on primal here
     clean_model();
@@ -439,10 +440,10 @@ void classWHInter::solve() {
         break;
 
       int m = mod.size();
-      index.reserve(m);
-      w.reserve(m);
-      x.reserve(m);
-      key.reserve(m);
+      index.resize(m);
+      w.resize(m);
+      x.resize(m);
+      key.resize(m);
 
       pre_solve(true); // condition on dual here
       clean_model();
